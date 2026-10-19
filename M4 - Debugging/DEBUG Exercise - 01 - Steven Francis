@@ -1,0 +1,64 @@
+// DEBUG Exercise - 01
+// Student: Steven Francis
+// SDEV120 - Module 4: Applying testing and debugging techniques
+
+Question: You have been tasked with reviewing and updating this program. What steps would you take to identify any issues in the code?
+Your Response:
+First, I would read the comments at the top so I know what the program is supposed to do: average two test scores and display Pass if the average is 60 or higher, otherwise Fail. Next, I would review the Declarations and make sure every variable the program uses is declared there and spelled the same way everywhere it appears. Then I would trace the program one line at a time. For a loop, that means checking that the loop variable gets a value before the while condition is tested (a priming input) and gets a new value at the bottom of the loop; otherwise the loop can't start correctly or can never end. I would check every calculation for order of operations and every keyword for spelling (output, input, endif, endwhile). Finally, I would desk-check the program with test data where I already know the correct answer: a normal case (100 and 80 should average 90 and Pass), a boundary case (60 and 60 should average exactly 60 and Pass), a just-below case (50 and 69 should average 59.5 and Fail), and the sentinel value 0 to make sure the program quits. After fixing the problems I would run the same tests again to confirm the fixes worked and didn't break anything else.
+
+Question: What actions could the developer have taken to minimize the number of errors?
+Your Response:
+The developer could have planned the logic with a flowchart before writing the pseudocode, which would have shown the missing input steps right away. Using the standard priming-read loop structure every time (input before the loop, input again at the end of the loop body) would have prevented both missing inputs. Writing the formula with parentheses instead of relying on the order of operations would have fixed the average calculation. Desk-checking with a few sample values while writing, not just at the end, would have caught the wrong average (100 and 80 gives 140 in the original instead of 90). Consistent naming and indentation, plus having another person review the code, would also catch typos like "ouput" before the program is turned in.
+
+Debugging Exercise (corrected):
+
+// This pseudocode is intended to determine whether students have
+// passed or failed a course; student needs to average 60 or
+// more on two tests.
+start
+   Declarations
+      num firstTest
+      num secondTest
+      num average
+      num PASSING = 60
+   output "Enter first score or 0 to quit "
+   input firstTest
+   while firstTest <> 0
+      output "Enter second score "
+      input secondTest
+      average = (firstTest + secondTest) / 2
+      output "Average is ", average
+      if average >= PASSING then
+         output "Pass"
+      else
+         output "Fail"
+      endif
+      output "Enter first score or 0 to quit "
+      input firstTest
+   endwhile
+stop
+
+// ------------------------------------------------------------
+// Debugging log - errors found and corrected
+// ------------------------------------------------------------
+// 1. Missing priming input. The program prompted for the first
+//    score but never read it, so firstTest had no value when the
+//    while condition was tested. Added: input firstTest
+// 2. Changed "while firstTest not equal to 0" to
+//    "while firstTest <> 0" for readability.
+// 3. Average calculated incorrectly. Division happens before
+//    addition, so firstTest + secondTest / 2 only halved the
+//    second score. Changed to: average = (firstTest + secondTest) / 2
+// 4. Misspelled keyword "ouput" corrected to "output".
+// 5. Missing input at the end of the loop. The program asked for
+//    the next first score but never read it, so firstTest never
+//    changed and the loop could never end (infinite loop).
+//    Added: input firstTest  (just before endwhile)
+//
+// Desk-check (test data -> expected result)
+//    firstTest  secondTest  average  output
+//    100        80          90       Average is 90 / Pass
+//    60         60          60       Average is 60 / Pass   (boundary)
+//    50         69          59.5     Average is 59.5 / Fail
+//    0          -           -        loop ends, program stops
+//    Original formula with 100 and 80: 100 + 80 / 2 = 140 (wrong)
