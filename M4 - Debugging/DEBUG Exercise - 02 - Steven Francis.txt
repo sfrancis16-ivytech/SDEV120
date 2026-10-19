@@ -1,0 +1,60 @@
+// DEBUG Exercise - 02
+// Student: Steven Francis
+// SDEV120 - Module 4: Applying testing and debugging techniques
+
+// This pseudocode is intended to display employee net pay values.
+// All employees have a standard $45 deduction from their checks.
+// If an employee does not earn enough to cover the deduction
+// an error message is displayed.
+start
+   Declarations
+      string name
+      num hours
+      num rate
+      num DEDUCTION = 45
+      string EOFNAME = "ZZZ"
+      num gross
+      num net
+   output "Enter first name or ", EOFNAME, " to quit"
+   input name
+   while name <> EOFNAME
+      output "Enter hours worked for ", name
+      input hours
+      output "Enter hourly rate for ", name
+      input rate
+      gross = hours * rate
+      net = gross - DEDUCTION
+      if net > 0 then
+         output "Net pay for ", name, " is ", net
+      else
+         output "Deductions not covered. Net is 0."
+      endif
+      output "Enter next name or ", EOFNAME, " to quit"
+      input name
+   endwhile
+   output "End of job"
+stop
+
+// ------------------------------------------------------------
+// Debugging log - errors found and corrected
+// ------------------------------------------------------------
+// 1. DEDUCTION was declared as a string. It holds the number 45
+//    and is subtracted from gross, so it must be numeric.
+//    Changed to: num DEDUCTION = 45
+// 2. "if name not equal to EOFNAME ... endif" only processes one
+//    employee. The program reads the next name at the bottom, so
+//    this must be a loop. Changed to:
+//    while name <> EOFNAME ... endwhile
+// 3. "while net > 0 then ... else ... endwhile" is a decision, not
+//    a loop. A while has no else, and since net never changes
+//    inside it, it would display the same line forever. Changed to:
+//    if net > 0 then ... else ... endif
+// 4. Fixed the indentation of the "Deductions not covered" output
+//    so it lines up under else.
+//
+// Desk-check (test data -> expected result)
+//    name  hours  rate  gross  net   output
+//    Ann   40     15    600    555   Net pay for Ann is 555
+//    Bob   2      20    40     -5    Deductions not covered. Net is 0.
+//    Cal   3      15    45     0     Deductions not covered. Net is 0.
+//    ZZZ   -      -     -      -     loop ends, End of job

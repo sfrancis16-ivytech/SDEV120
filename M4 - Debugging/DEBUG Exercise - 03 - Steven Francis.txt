@@ -1,0 +1,79 @@
+// DEBUG Exercise - 03
+// Student: Steven Francis
+// SDEV120 - Module 4: Applying testing and debugging techniques
+
+// This pseudocode is intended to display
+// employee net pay values. All employees have a standard
+// $45 deduction from their checks.
+// If an employee does not earn enough to cover the deduction
+// an error message is displayed.
+// This example is modularized.
+start
+   Declarations
+      string name
+      num hours
+      num rate
+      num gross
+      num net
+      num DEDUCTION = 45
+      string EOFNAME = "ZZZZ"
+   housekeeping()
+   while name <> EOFNAME
+      mainLoop()
+   endwhile
+   finish()
+stop
+
+housekeeping()
+   output "Enter first name or ", EOFNAME, " to quit "
+   input name
+return
+
+mainLoop()
+   output "Enter hours worked for ", name
+   input hours
+   output "Enter hourly rate for ", name
+   input rate
+   gross = hours * rate
+   net = gross - DEDUCTION
+   if net > 0 then
+      output "Net pay for ", name, " is ", net
+   else
+      output "Deductions not covered. Net is 0."
+   endif
+   output "Enter next name or ", EOFNAME, " to quit "
+   input name
+return
+
+finish()
+   output "End of job"
+return
+
+// ------------------------------------------------------------
+// Debugging log - errors found and corrected
+// ------------------------------------------------------------
+// 1. String constant was missing quotes: EOFNAME = ZZZZ.
+//    Changed to: string EOFNAME = "ZZZZ"
+// 2. housekeeping() was called inside a while loop that tests
+//    name before name has any value. Housekeeping runs one time
+//    at the start, so it is now called once with no loop.
+// 3. housekeeping() displayed the prompt but never read the
+//    answer. Added the priming read: input name
+// 4. gross is used in mainLoop() but was never declared.
+//    Added: num gross
+// 5. Moved the mainLoop() declarations (hours, rate, DEDUCTION,
+//    net) up to the main program's Declarations with the other
+//    variables, so every variable is declared in one place and
+//    is available to all of the modules (name and EOFNAME were
+//    already declared there and are used by the modules).
+// 6. finish() was inside "while name not equal to EOFNAME". When
+//    the main loop ends, name is equal to EOFNAME, so that loop
+//    never ran and "End of job" was never displayed. finish() is
+//    now called once after the main loop.
+// 7. Changed "not equal to" to "<>" for readability.
+//
+// Desk-check (test data -> expected result)
+//    name  hours  rate  gross  net   output
+//    Dana  35     18    630    585   Net pay for Dana is 585
+//    Eli   1      30    30     -15   Deductions not covered. Net is 0.
+//    ZZZZ  -      -     -      -     loop ends, End of job
